@@ -1,5 +1,5 @@
 #define __CL_ENABLE_EXCEPTIONS
-#include <OpenCL/cl.h>
+#include <CL/cl.h>
 #include "cl.hpp"
 
 #include <cassert>
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
         cout << "Devices size: " << devices.size() << endl;
 
         cl::Context context(devices);
-        cl::CommandQueue queue(context, devices[1], CL_QUEUE_PROFILING_ENABLE);
+        cl::CommandQueue queue(context, devices[0], CL_QUEUE_PROFILING_ENABLE);
 
         std::ifstream cl_file("scan.cl");
         std::string cl_string_source(std::istreambuf_iterator<char>(cl_file), (std::istreambuf_iterator<char>()));
@@ -286,6 +286,7 @@ int main(int argc, char* argv[])
     }
     catch (cl::Error e) {
         cout << endl << e.what() << " : " << e.err() << endl;
+        return 1;
     }
 
     return 0;

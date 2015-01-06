@@ -12,7 +12,7 @@ __kernel void inclusive_scan_hillis_steele(__global float* input, __global float
     
     if (is_final) {
         
-        int8 offsets;
+        int offsets[8];
         offsets[0] = 0;
         offsets[1] = gsize;
         offsets[2] = offsets[1] / block_size;
@@ -26,7 +26,7 @@ __kernel void inclusive_scan_hillis_steele(__global float* input, __global float
         //        ++k;
         //    }
         
-        int8 decomp;
+        int decomp[8];
         
         int id = gid + 1;
         int ds = 0;
@@ -47,16 +47,13 @@ __kernel void inclusive_scan_hillis_steele(__global float* input, __global float
                 output[gid] = 1000;
                 return;
             }
-            v += lasts[ind];
+            v += decomp[i];  lasts[ind];
         }
         
 
-        
-        output[gid] =1; v;
+        output[gid] = decomp[1];
         return;
     }
-    
-
     
     a[lid] = b[lid] = lasts[gid + offset];
     barrier(CLK_LOCAL_MEM_FENCE);
