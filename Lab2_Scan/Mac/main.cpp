@@ -93,7 +93,7 @@ void write_input(string const& file_name, vector<float> const& buffer)
     fout << buffer.size() << endl;
     
     for (vector<float>::const_iterator it = buffer.begin(); it != buffer.end(); ++it) {
-        fout << std::fixed << (3) << *it << " ";
+        fout << std::fixed << setprecision(3) << *it << " ";
     }
     
     fout << endl;
@@ -125,6 +125,7 @@ void print_buffer(vector<float> const& buffer, int count)
         cout << setprecision(3) << *it << " ";
         ++k;
     }
+    cout << endl;
 }
 
 int compute_total_array_size(int array_size, int block_size)
@@ -141,7 +142,7 @@ int compute_total_array_size(int array_size, int block_size)
 
 int main(int argc, char* argv[])
 {
-    //generate_io(10000);
+    //generate_io(1048576);
 
     int const BLOCK_SIZE_MAX = 256;
 
@@ -179,10 +180,10 @@ int main(int argc, char* argv[])
         int const block_size = array_size > block_size_max ? block_size_max : array_size;
         int const total_array_size = compute_total_array_size(array_size, block_size);
 
-        input.resize(array_size);
+        input.resize(total_array_size);
         output.resize(array_size);
 
-        cl::Buffer dev_input(context, CL_MEM_READ_ONLY, sizeof(float) * array_size);
+        cl::Buffer dev_input(context, CL_MEM_READ_ONLY, sizeof(float) * total_array_size);
         cl::Buffer dev_output(context, CL_MEM_READ_ONLY, sizeof(float) * array_size);
         cl::Buffer dev_lasts(context, CL_MEM_READ_WRITE, sizeof(float) * total_array_size);
 
